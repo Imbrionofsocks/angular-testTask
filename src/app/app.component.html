@@ -1,6 +1,10 @@
 <nav>
-  <a mat-button routerLink="/editor">Редактор</a>
-  <a mat-button routerLink="/viewer">Просмотр</a>
+  <h2>{{ 'TITLE' | translate }}</h2>
+  <a mat-button routerLink="/editor">{{ 'EDITOR' | translate }}</a>
+  <a mat-button routerLink="/viewer">{{ 'VIEWER' | translate }}</a>
 </nav>
+<div>
+  <button (click)="useLanguage('en')">{{ 'ENGLISH' | translate }}</button>
+  <button (click)="useLanguage('ru')">{{ 'RUSSIAN' | translate }}</button>
+</div>
 <router-outlet></router-outlet>
-

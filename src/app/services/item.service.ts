@@ -51,7 +51,7 @@ export class ItemService {
     items.forEach(item => {
       const dueDate = new Date(item.dueDate);
       if (dueDate <= now) {
-        this.notificationService.showNotification(`Срок выполнения: ${item.name}`);
+        this.notificationService.showNotification(item.name);
       }
     });
 

@@ -17,7 +17,10 @@ import { ItemDialog } from './editor/item-dialog.component';
 import {SelectItemDialog} from "./editor/select-item-dialog.component";
 import {MatListOption, MatSelectionList} from "@angular/material/list";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { createTranslateLoader } from './translate-loader';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +44,15 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatListOption,
     MatSelectionList,
     ReactiveFormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
