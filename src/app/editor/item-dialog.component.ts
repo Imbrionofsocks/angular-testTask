@@ -11,7 +11,6 @@ import { ItemService } from '../services/item.service';
 export class ItemDialog implements OnInit {
   itemForm: FormGroup;
   isReadOnly: boolean;
-  dueTime: string;
 
   constructor(
     private fb: FormBuilder,
@@ -20,31 +19,85 @@ export class ItemDialog implements OnInit {
     private itemService: ItemService
   ) {
     this.isReadOnly = data.isReadOnly;
-    this.data.item.dueDate = new Date(this.data.item.dueDate); // Преобразование строки в объект Date
-    this.dueTime = this.formatTime(this.data.item.dueDate);
 
+    // Создаем форму с пустыми значениями по умолчанию
     this.itemForm = this.fb.group({
-      name: [{ value: this.data.item.name, disabled: this.isReadOnly }, [Validators.required, this.uniqueNameValidator.bind(this)]],
-      dueDate: [{ value: this.data.item.dueDate, disabled: this.isReadOnly }, [Validators.required, this.futureDateValidator]],
-      dueTime: [{ value: this.dueTime, disabled: this.isReadOnly }, [Validators.required, this.validTimeValidator]],
-      description: [{ value: this.data.item.description, disabled: this.isReadOnly }]
+      name: [{ value: '', disabled: this.isReadOnly }, [Validators.required, this.uniqueNameValidator.bind(this)]],
+      dueDate: [{ value: '', disabled: this.isReadOnly }, [Validators.required]],
+      dueTime: [{ value: '', disabled: this.isReadOnly }, [Validators.required, this.validTimeValidator]],
+      description: [{ value: '', disabled: this.isReadOnly }]
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.data.item) {
+      const itemDate = this.data.item.dueDate;
+
+      // Проверяем, является ли itemDate объектом Date
+      const isDateObject = itemDate instanceof Date || !isNaN(Date.parse(itemDate));
+
+      if (this.isReadOnly && isDateObject) {
+        // Если режим только для чтения и itemDate является датой
+        const dateObject = new Date(itemDate); // Преобразуем itemDate в объект Date
+        const formattedDate = dateObject.toISOString().split('T')[0]; // Форматируем дату без времени
+        const formattedTime = this.formatTime(dateObject); // Форматируем время
+
+        this.itemForm.patchValue({
+          name: this.data.item.name || '',
+          dueDate: formattedDate || '',
+          dueTime: formattedTime || '',
+          description: this.data.item.description || ''
+        });
+      }
+    }
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   onSave(): void {
-    if (this.itemForm.valid) {
-      const formValues = this.itemForm.value;
+    if (this.itemForm.invalid) {
+      this.itemForm.markAllAsTouched();
+      return;
+    }
+
+    const formValues = this.itemForm.value;
+    const dueDate = new Date(formValues.dueDate);
+    const dueTime = formValues.dueTime;
+
+    if (this.isDateAndTimeValid(dueDate, dueTime)) {
       this.data.item.name = formValues.name;
-      this.data.item.dueDate = this.combineDateAndTime(formValues.dueDate, formValues.dueTime);
+      this.data.item.dueDate = this.combineDateAndTime(dueDate, dueTime);
       this.data.item.description = formValues.description;
       this.dialogRef.close(this.data.item);
+    } else {
+      alert('Дата или время некорректны');
     }
+  }
+
+  private isDateAndTimeValid(date: Date, time: string): boolean {
+    const currentDate = new Date();
+    const inputDate = new Date(date);
+    const [hours, minutes] = time.split(':').map(Number);
+
+    // Проверяем, что выбранная дата не в прошлом
+    if (inputDate < currentDate) {
+      return false;
+    }
+
+    // Если дата совпадает с текущей, проверяем время
+    if (inputDate.toDateString() === currentDate.toDateString()) {
+      const inputTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      const currentTime = this.formatTime(currentDate);
+
+      // Позволяем дату и время, если время в будущем по сравнению с текущим
+      if (inputTime <= currentTime) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   private formatTime(date: Date): string {
@@ -55,23 +108,24 @@ export class ItemDialog implements OnInit {
 
   private combineDateAndTime(date: Date, time: string): Date {
     const [hours, minutes] = time.split(':').map(Number);
-    const newDate = new Date(date);
-    newDate.setHours(hours, minutes);
-    return newDate;
+    const combinedDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      isNaN(hours) ? 0 : hours,
+      isNaN(minutes) ? 0 : minutes
+    );
+    return combinedDate;
   }
 
   private uniqueNameValidator(control: any) {
+    if (this.isReadOnly) {
+      return null;
+    }
+
     const items = this.itemService.getItems();
     if (items.some(item => item.name === control.value && item !== this.data.item)) {
       return { uniqueName: true };
-    }
-    return null;
-  }
-
-  private futureDateValidator(control: any) {
-    const currentDate = new Date();
-    if (new Date(control.value) < currentDate) {
-      return { futureDate: true };
     }
     return null;
   }

@@ -23,5 +23,6 @@
   "FILTER_START_DATE": "Дата выполнения с",
   "FILTER_END_DATE": "Дата выполнения по",
   "CREATION_DATE": "Дата создания",
-  "ACTIONS": "Действия"
+  "ACTIONS": "Действия",
+  "CANCEL": "Отмена"
 }

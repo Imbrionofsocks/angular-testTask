@@ -23,5 +23,6 @@
   "FILTER_START_DATE": "Creation Date",
   "FILTER_END_DATE": "Date of completion",
   "CREATION_DATE": "Creation Date",
-  "ACTIONS": "Actions"
+  "ACTIONS": "Actions",
+  "CANCEL": "Cancel"
 }

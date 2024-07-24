@@ -20,12 +20,12 @@ export class ViewerComponent implements OnInit {
   constructor(public dialog: MatDialog, private itemService: ItemService) {}
 
   async ngOnInit(): Promise<void> {
-    this.items = await this.itemService.getItems(); // Используем await для получения данных
+    this.items = this.itemService.getItems(); // Используем метод без await
     this.filteredItems = [...this.items]; // Клонируем массив для начальной фильтрации
   }
 
   async applyFilter(): Promise<void> {
-    this.filteredItems = (await this.itemService.getItems()).filter(item => {
+    this.filteredItems = this.itemService.getItems().filter(item => {
       const matchesName = !this.filterName || item.name.includes(this.filterName);
       const matchesStartDate = !this.filterStartDate || new Date(item.dueDate) >= this.filterStartDate;
       const matchesEndDate = !this.filterEndDate || new Date(item.dueDate) <= this.filterEndDate;
@@ -35,34 +35,37 @@ export class ViewerComponent implements OnInit {
 
   async copyItem(item: Item): Promise<void> {
     const newItem = { ...item, creationDate: new Date() };
-    await this.itemService.addItem(newItem);
+    this.itemService.addItem(newItem);
     await this.applyFilter();
   }
 
   async deleteItem(item: Item): Promise<void> {
-    await this.itemService.deleteItem(item);
+    this.itemService.deleteItem(item);
     await this.applyFilter();
   }
 
   async moveItemUp(item: Item): Promise<void> {
-    const index = this.items.indexOf(item);
+    const index = this.items.findIndex(i =>
+      i.name === item.name && new Date(i.creationDate).getTime() === new Date(item.creationDate).getTime()
+    );
     if (index > 0) {
       [this.items[index - 1], this.items[index]] = [this.items[index], this.items[index - 1]];
-      await this.itemService.updateItem(this.items[index - 1]);
-      await this.itemService.updateItem(this.items[index]);
-      await this.applyFilter();
+      await this.itemService.updateItems(this.items);
+      this.filteredItems = [...this.items];
     }
   }
 
   async moveItemDown(item: Item): Promise<void> {
-    const index = this.items.indexOf(item);
+    const index = this.items.findIndex(i =>
+      i.name === item.name && new Date(i.creationDate).getTime() === new Date(item.creationDate).getTime()
+    );
     if (index < this.items.length - 1) {
       [this.items[index + 1], this.items[index]] = [this.items[index], this.items[index + 1]];
-      await this.itemService.updateItem(this.items[index + 1]);
-      await this.itemService.updateItem(this.items[index]);
-      await this.applyFilter();
+      await this.itemService.updateItems(this.items);
+      this.filteredItems = [...this.items];
     }
   }
+
 
   openViewDialog(item: Item): void {
     this.dialog.open(ItemDialog, {

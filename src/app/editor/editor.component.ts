@@ -69,7 +69,7 @@ export class EditorComponent {
   copyItem(item: Item): void {
     const items = this.itemService.getItems();
     const nameCount = items.filter(i => i.name.startsWith(item.name)).length;
-    const newItem = { ...item, name: `${item.name} (${nameCount + 1})`, creationDate: new Date() };
+    const newItem = { ...item, creationDate: new Date(), dueDate: new Date() };
     this.itemService.addItem(newItem);
   }
 

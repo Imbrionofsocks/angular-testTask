@@ -1,20 +1,27 @@
-<h1 mat-dialog-title>{{ isReadOnly ? ('VIEW_ITEM' | translate) : ('ADD_ITEM' | translate) }}</h1>
-<div mat-dialog-content>
+<h1 mat-dialog-title>{{ isReadOnly ? 'Просмотр элемента' : 'Добавить элемент' }}</h1>
+<div mat-dialog-content [formGroup]="itemForm">
   <mat-form-field>
-    <mat-label>{{ 'NAME' | translate }}</mat-label>
-    <input matInput [(ngModel)]="data.item.name" [disabled]="isReadOnly" />
+    <mat-label>Название</mat-label>
+    <input matInput formControlName="name" [disabled]="isReadOnly" />
+    <mat-error *ngIf="itemForm.controls['name'].hasError('uniqueName')">Название должно быть уникальным</mat-error>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>{{ 'DUE_DATE' | translate }}</mat-label>
-    <input matInput [matDatepicker]="picker" [(ngModel)]="data.item.dueDate" [disabled]="isReadOnly" />
+    <mat-label>Дата выполнения</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="dueDate" [disabled]="isReadOnly" placeholder="YYYY-MM-DD" />
     <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="itemForm.controls['dueDate'].hasError('required')">Дата выполнения обязательна</mat-error>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
-    <textarea matInput [(ngModel)]="data.item.description" [disabled]="isReadOnly"></textarea>
+    <mat-label>Время выполнения</mat-label>
+    <input matInput formControlName="dueTime" [disabled]="isReadOnly" placeholder="HH:MM" />
+    <mat-error *ngIf="itemForm.controls['dueTime'].hasError('validTime')">Неверное время</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Описание</mat-label>
+    <textarea matInput formControlName="description" [disabled]="isReadOnly"></textarea>
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">{{ isReadOnly ? ('CLOSE' | translate) : ('CANCEL' | translate) }}</button>
-  <button mat-button (click)="onSave()" *ngIf="!isReadOnly">{{ 'SAVE' | translate }}</button>
+  <button mat-button (click)="onNoClick()">{{ isReadOnly ? 'Закрыть' : 'Отмена' }}</button>
+  <button mat-button (click)="onSave()" *ngIf="!isReadOnly">Сохранить</button>
 </div>

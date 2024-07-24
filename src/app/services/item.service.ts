@@ -26,12 +26,11 @@ export class ItemService {
 
   deleteItem(item: Item): void {
     let items = this.getItems();
-    items = items.filter(i => i !== item);
+    items = items.filter(i => i.name !== item.name);
     this.saveItems(items);
   }
 
-  updateItem(updatedItem: Item): void {
-    const items = this.getItems().map(item => item === updatedItem ? updatedItem : item);
+  updateItems(items: Item[]): void {
     this.saveItems(items);
   }
 
@@ -51,7 +50,7 @@ export class ItemService {
     items.forEach(item => {
       const dueDate = new Date(item.dueDate);
       if (dueDate <= now) {
-        this.notificationService.showNotification(item.name);
+        this.notificationService.showNotification(`Срок выполнения: ${item.name}`);
       }
     });
 
@@ -59,3 +58,4 @@ export class ItemService {
     setTimeout(() => this.checkDueDates(), 60000);
   }
 }
+
