@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>{{ isReadOnly ? 'Просмотр элемента' : 'Добавить элемент' }}</h1>
+<div mat-dialog-content [formGroup]="itemForm">
+  <mat-form-field>
+    <mat-label>Название</mat-label>
+    <input matInput formControlName="name" [disabled]="isReadOnly" />
+    <mat-error *ngIf="itemForm.controls['name'].hasError('required')">Название обязательно</mat-error>
+    <mat-error *ngIf="itemForm.controls['name'].hasError('uniqueName')">Название должно быть уникальным</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Дата выполнения</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="dueDate" [disabled]="isReadOnly" />
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="itemForm.controls['dueDate'].hasError('required')">Дата выполнения обязательна</mat-error>
+    <mat-error *ngIf="itemForm.controls['dueDate'].hasError('futureDate')">Дата выполнения должна быть в будущем</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Время выполнения</mat-label>
+    <input matInput formControlName="dueTime" [disabled]="isReadOnly" placeholder="HH:MM" />
+    <mat-error *ngIf="itemForm.controls['dueTime'].hasError('required')">Время выполнения обязательно</mat-error>
+    <mat-error *ngIf="itemForm.controls['dueTime'].hasError('validTime')">Неверное время</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Описание</mat-label>
+    <textarea matInput formControlName="description" [disabled]="isReadOnly"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">{{ isReadOnly ? 'Закрыть' : 'Отмена' }}</button>
+  <button mat-button (click)="onSave()" *ngIf="!isReadOnly">Сохранить</button>
+</div>

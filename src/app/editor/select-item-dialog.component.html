@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>{{ action === 'copy' ? 'Копировать элемент' : 'Удалить элемент' }}</h1>
+<div mat-dialog-content>
+  <mat-selection-list #itemsList>
+    <mat-list-option *ngFor="let item of items" (click)="onSelect(item)">
+      {{ item.name }}
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Отмена</button>
+</div>

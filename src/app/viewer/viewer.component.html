@@ -1,0 +1,43 @@
+<div>
+  <mat-form-field>
+    <mat-label>Фильтр по наименованию</mat-label>
+    <input matInput [(ngModel)]="filterName" (input)="applyFilter()" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Дата выполнения с</mat-label>
+    <input matInput [matDatepicker]="startPicker" [(ngModel)]="filterStartDate" (dateChange)="applyFilter()" />
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Дата выполнения по</mat-label>
+    <input matInput [matDatepicker]="endPicker" [(ngModel)]="filterEndDate" (dateChange)="applyFilter()" />
+    <mat-datepicker #endPicker></mat-datepicker>
+  </mat-form-field>
+</div>
+<mat-table [dataSource]="filteredItems" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Название </mat-header-cell>
+    <mat-cell *matCellDef="let item" (click)="openViewDialog(item)"> {{item.name}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="creationDate">
+    <mat-header-cell *matHeaderCellDef> Дата создания </mat-header-cell>
+    <mat-cell *matCellDef="let item" (click)="openViewDialog(item)"> {{item.creationDate | date:'short'}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="dueDate">
+    <mat-header-cell *matHeaderCellDef> Дата выполнения </mat-header-cell>
+    <mat-cell *matCellDef="let item" (click)="openViewDialog(item)"> {{item.dueDate | date:'short'}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> Действия </mat-header-cell>
+    <mat-cell *matCellDef="let item">
+      <button mat-button (click)="moveItemUp(item)">Вверх</button>
+      <button mat-button (click)="moveItemDown(item)">Вниз</button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
