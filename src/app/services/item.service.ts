@@ -57,4 +57,3 @@ export class ItemService {
     setTimeout(() => this.checkDueDates(), 60000);
   }
 }
-

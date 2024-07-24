@@ -34,17 +34,6 @@ export class ViewerComponent implements OnInit {
     });
   }
 
-  async copyItem(item: Item): Promise<void> {
-    const newItem = {...item, creationDate: new Date()};
-    this.itemService.addItem(newItem);
-    await this.applyFilter();
-  }
-
-  async deleteItem(item: Item): Promise<void> {
-    this.itemService.deleteItem(item);
-    await this.applyFilter();
-  }
-
   async moveItemUp(item: Item): Promise<void> {
     const index = this.items.findIndex(i =>
       i.name === item.name && new Date(i.creationDate).getTime() === new Date(item.creationDate).getTime()

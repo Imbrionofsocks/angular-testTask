@@ -69,8 +69,16 @@ export class EditorComponent {
 
   copyItem(item: Item): void {
     const items = this.itemService.getItems();
-    const nameCount = items.filter(i => i.name.startsWith(item.name)).length;
-    const newItem = {...item, creationDate: new Date(), dueDate: new Date()};
+    const namePattern = new RegExp(`^${item.name}_копия_(\\d+)$`);
+    const maxCopyNumber = items
+      .map(i => {
+        const match = i.name.match(namePattern);
+        return match ? parseInt(match[1], 10) : 0;
+      })
+      .reduce((max, num) => Math.max(max, num), 0);
+
+    const newItemName = `${item.name}_копия_${maxCopyNumber + 1}`;
+    const newItem = { ...item, id: Math.random().toString(36).substr(2, 9), name: newItemName, creationDate: new Date() };
     this.itemService.addItem(newItem);
   }
 
