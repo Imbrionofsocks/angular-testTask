@@ -33,14 +33,12 @@ export class ItemDialog implements OnInit {
     if (this.data.item) {
       const itemDate = this.data.item.dueDate;
 
-      // Проверяем, является ли itemDate объектом Date
       const isDateObject = itemDate instanceof Date || !isNaN(Date.parse(itemDate));
 
       if (this.isReadOnly && isDateObject) {
-        // Если режим только для чтения и itemDate является датой
-        const dateObject = new Date(itemDate); // Преобразуем itemDate в объект Date
-        const formattedDate = dateObject.toISOString().split('T')[0]; // Форматируем дату без времени
-        const formattedTime = this.formatTime(dateObject); // Форматируем время
+        const dateObject = new Date(itemDate);
+        const formattedDate = dateObject.toISOString().split('T')[0];
+        const formattedTime = this.formatTime(dateObject);
 
         this.itemForm.patchValue({
           name: this.data.item.name || '',
@@ -81,17 +79,14 @@ export class ItemDialog implements OnInit {
     const inputDate = new Date(date);
     const [hours, minutes] = time.split(':').map(Number);
 
-    // Проверяем, что выбранная дата не в прошлом
     if (inputDate < currentDate) {
       return false;
     }
 
-    // Если дата совпадает с текущей, проверяем время
     if (inputDate.toDateString() === currentDate.toDateString()) {
       const inputTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       const currentTime = this.formatTime(currentDate);
 
-      // Позволяем дату и время, если время в будущем по сравнению с текущим
       if (inputTime <= currentTime) {
         return false;
       }

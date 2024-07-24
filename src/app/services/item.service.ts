@@ -54,7 +54,6 @@ export class ItemService {
       }
     });
 
-    // Проверять каждую минуту
     setTimeout(() => this.checkDueDates(), 60000);
   }
 }
