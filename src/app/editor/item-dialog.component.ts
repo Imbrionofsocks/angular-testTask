@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Item } from '../models/item.model';
-import { ItemService } from '../services/item.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Item} from '../models/item.model';
+import {ItemService} from '../services/item.service';
 
 @Component({
   selector: 'item-dialog',
@@ -22,10 +22,10 @@ export class ItemDialog implements OnInit {
 
     // Создаем форму с пустыми значениями по умолчанию
     this.itemForm = this.fb.group({
-      name: [{ value: '', disabled: this.isReadOnly }, [Validators.required, this.uniqueNameValidator.bind(this)]],
-      dueDate: [{ value: '', disabled: this.isReadOnly }, [Validators.required]],
-      dueTime: [{ value: '', disabled: this.isReadOnly }, [Validators.required, this.validTimeValidator]],
-      description: [{ value: '', disabled: this.isReadOnly }]
+      name: [{value: '', disabled: this.isReadOnly}, [Validators.required, this.uniqueNameValidator.bind(this)]],
+      dueDate: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      dueTime: [{value: '', disabled: this.isReadOnly}, [Validators.required, this.validTimeValidator]],
+      description: [{value: '', disabled: this.isReadOnly}]
     });
   }
 
@@ -120,7 +120,7 @@ export class ItemDialog implements OnInit {
 
     const items = this.itemService.getItems();
     if (items.some(item => item.name === control.value && item !== this.data.item)) {
-      return { uniqueName: true };
+      return {uniqueName: true};
     }
     return null;
   }
@@ -128,7 +128,7 @@ export class ItemDialog implements OnInit {
   private validTimeValidator(control: any) {
     const [hours, minutes] = control.value.split(':').map(Number);
     if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-      return { validTime: true };
+      return {validTime: true};
     }
     return null;
   }

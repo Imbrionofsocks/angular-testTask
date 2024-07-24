@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Item } from '../models/item.model';
-import { ItemService } from '../services/item.service';
-import { ItemDialog } from '../editor/item-dialog.component';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {Item} from '../models/item.model';
+import {ItemService} from '../services/item.service';
+import {ItemDialog} from '../editor/item-dialog.component';
 
 @Component({
   selector: 'app-viewer',
@@ -17,7 +17,8 @@ export class ViewerComponent implements OnInit {
   filterStartDate: Date | null = null;
   filterEndDate: Date | null = null;
 
-  constructor(public dialog: MatDialog, private itemService: ItemService) {}
+  constructor(public dialog: MatDialog, private itemService: ItemService) {
+  }
 
   async ngOnInit(): Promise<void> {
     this.items = this.itemService.getItems(); // Используем метод без await
@@ -34,7 +35,7 @@ export class ViewerComponent implements OnInit {
   }
 
   async copyItem(item: Item): Promise<void> {
-    const newItem = { ...item, creationDate: new Date() };
+    const newItem = {...item, creationDate: new Date()};
     this.itemService.addItem(newItem);
     await this.applyFilter();
   }
@@ -70,7 +71,7 @@ export class ViewerComponent implements OnInit {
   openViewDialog(item: Item): void {
     this.dialog.open(ItemDialog, {
       width: '250px',
-      data: { item, isReadOnly: true }
+      data: {item, isReadOnly: true}
     });
   }
 }
