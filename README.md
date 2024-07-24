@@ -1,27 +1,60 @@
-# Untitled3
+# Angular Test Task
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.1.
+## Описание
 
-## Development server
+Angular Test Task - это приложение для управления элементами(задачами), написанное с использованием Angular и Angular Material. Оно позволяет пользователям создавать, редактировать и удалять элементы(задачи), а также просматривать их в виде таблицы с возможностью фильтрации. Приложение поддерживает локализацию на английский и русский языки и уведомляет пользователя о приближающемся сроке выполнения задачи.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Основные функции
 
-## Code scaffolding
+- **Редактор задач**: Создание, редактирование и удаление задач.
+- **Просмотр задач**: Просмотр и фильтрация задач по имени и дате выполнения.
+- **Копирование и удаление**: Копирование задачи с уникальным номером в названии и удаление задачи.
+- **Локализация**: Поддержка английского и русского языков.
+- **Уведомления**: Уведомление о приближающемся сроке выполнения задачи.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Структура проекта
 
-## Build
+Проект организован следующим образом:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **`src/`**: Основная директория с исходным кодом приложения.
+  - **`app/`**: Директория с компонентами и сервисами приложения.
+    - **`components/`**: Содержит компоненты пользовательского интерфейса:
+      - **`viewer/`**: Компонент для просмотра задач.
+        - **`viewer.component.ts`**: Логика компонента просмотра задач.
+        - **`viewer.component.html`**: Шаблон компонента просмотра задач.
+      - **`editor/`**: Компонент для редактирования и создания задач.
+        - **`editor.component.ts`**: Логика компонента редактирования задач.
+        - **`editor.component.html`**: Шаблон компонента редактирования задач.
+      - **`item-dialog/`**: Компонент для диалогового окна редактирования задачи.
+        - **`item-dialog.component.ts`**: Логика диалогового окна.
+        - **`item-dialog.component.html`**: Шаблон диалогового окна.
+    - **`models/`**: Содержит интерфейсы данных.
+      - **`item.model.ts`**: Интерфейс для описания задачи.
+    - **`services/`**: Содержит сервисы приложения.
+      - **`item.service.ts`**: Сервис для управления задачами (добавление, удаление, обновление).
+    - **`app.component.ts`**: Основной компонент приложения, содержит навигацию и переключатель языков.
+    - **`app.component.html`**: Шаблон основного компонента приложения.
+  - **`assets/`**: Директория для статических ресурсов.
+    - **`i18n/`**: Файлы перевода для локализации (например, `en.json` и `ru.json`).
+  - **`environments/`**: Конфигурационные файлы для различных окружений (например, `environment.ts` и `environment.prod.ts`).
 
-## Running unit tests
+## Основные файлы
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- **`src/app/app.module.ts`**: Основной модуль приложения, импортирует модули и объявляет компоненты.
+- **`src/app/app.component.ts`**: Основной компонент приложения, содержащий навигацию и переключатель языков.
+- **`src/app/app.component.html`**: Шаблон основного компонента приложения.
+- **`src/app/components/viewer/viewer.component.ts`**: Логика компонента для просмотра задач.
+- **`src/app/components/viewer/viewer.component.html`**: Шаблон компонента для просмотра задач.
+- **`src/app/components/editor/editor.component.ts`**: Логика компонента для редактирования задач.
+- **`src/app/components/editor/editor.component.html`**: Шаблон компонента для редактирования задач.
+- **`src/app/components/item-dialog/item-dialog.component.ts`**: Логика диалогового окна для редактирования задач.
+- **`src/app/components/item-dialog/item-dialog.component.html`**: Шаблон диалогового окна для редактирования задач.
+- **`src/app/models/item.model.ts`**: Интерфейс для описания задачи.
+- **`src/app/services/item.service.ts`**: Сервис для управления задачами (добавление, удаление, обновление).
 
-## Running end-to-end tests
+## Локализация
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Файлы перевода находятся в директории `src/assets/i18n`. Доступны следующие языковые файлы:
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `en.json` - Английский
+- `ru.json` - Русский
